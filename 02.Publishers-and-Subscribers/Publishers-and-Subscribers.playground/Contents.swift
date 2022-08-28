@@ -67,7 +67,7 @@ example(of: "assign(to:on)") {
     }
     
     let object = SomeObjecet()
-    ㅖ
+    
     let publisher = ["Hello","world!"].publisher
     
     _ = publisher.assign(to: \.value, on: object)
@@ -87,6 +87,94 @@ example(of: "assign(to:)") {
     
     (0..<10).publisher
         .assign(to: &object.$value) // assign 을 통한 재구독
+    
+    print("object.value:\(object.value)") // 9 <- 마지막 숫자가 나오는걸 확인할 수 있음
+}
+
+//public protocol Publisher {
+//    // 1. Publisher가 생성할 수 있는 값의 유형
+//    associatedtype Output
+//
+//    // 2. Publisher가 생성할 수 있는 오류 유형. 오류가 생성되지 않는걸 보장하는 건 Never 를 사용하면 된다.
+//    associatedtype Failure : Error
+//
+//    // 4. subscribe(_:) 실행으로 subscriber가 publisher에 연결될 수 있게 된다. 이것이 subscription 이다.
+//    func receive<S>(subscriber: S)
+//     where S: Subscriber,
+//     Self.Failure == S.Failure
+//     Self.Output == S.Output
+//}
+//
+//extension Publisher {
+//    // 3. subscriber는 publisher에 대해 subscribe(_:)를 호출하여 접근
+//    public func subscribe<S>(_ subscriber: S)
+//     where S: Subscriber,
+//     Self.Failure == S.Failure,
+//     Self.Output == S.Input
+//}
+
+//public protocol Subscriber: CustomCombineIdentifierConvertible {
+//  // 1. subscriber 가 받을 수 있는 값의 유형
+//  associatedtype Input
+//
+//  // 2
+//  associatedtype Failure: Error
+//
+//  // 3. publisher는 subscriber에 대해 receive(subscription:)을 호출하여 subscription을 제공
+//  func receive(subscription: Subscription)
+//
+//  // 4. publisher는 subscriber에 대해 receive(:)를 호출하여 방금 게시한 새 값(published)을 subscriber에게 전달
+//  func receive(_ input: Self.Input) -> Subscribers.Demand
+//
+//  // 5. publisher는 subscriber에 대해 receive(completion:)를 호출하여 정상 or 오류 값 생성이 완료되었음을 알린다.
+//  func receive(completion: Subscribers.Completion<Self.Failure>)
+//}
+
+example(of: "Custom Subscriber") {
+    // 1.
+    //let publisher = (1...6).publisher
+    let publisher = ["A","B","C","D","E","F"].publisher
+    
+    // 2.
+    final class IntSubscriber: Subscriber {
+        // 3.
+        //typealias Input = Int
+        typealias Input = String
+        typealias Failure = Never
+        
+        // 4.
+        func receive(subscription: Subscription) {
+            subscription.request(.max(3))
+        }
+        
+        // 5.
+        //func receive(_ input: Int) -> Subscribers.Demand {
+        func receive(_ input: String) -> Subscribers.Demand {
+            print("Received value", input)
+            return .max(1)
+        }
+        
+        // 6.
+        func receive(completion: Subscribers.Completion<Never>) {
+            print("Received completion", completion)
+        }
+    }
+    
+    let subscriber = IntSubscriber()
+    
+    publisher.subscribe(subscriber)
+}
+
+example(of: "Future") {
+    func futureIncrement(integer: Int, afterDelay delay: TimeInterval) -> Future<Int, Never> {
+        Future<Int, Never> { promise in
+            DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
+                promise(.success(integer + 1))
+            }
+        }
+    }
+    
+    
 }
 
 

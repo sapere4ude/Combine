@@ -173,8 +173,31 @@ example(of: "Future") {
             }
         }
     }
+}
+
+example(of: "PassThroughSubject") {
+    // 1
+    enum MyError: Error {
+        case test
+    }
     
-    
+    // 2
+    final class StringSubscriber: Subscriber {
+        func receive(subscription: Subscription) {
+            <#code#>
+        }
+        
+        func receive(_ input: String) -> Subscribers.Demand {
+            <#code#>
+        }
+        
+        func receive(completion: Subscribers.Completion<MyError>) {
+            <#code#>
+        }
+        
+        typealias Input = String
+        typealias Failure = MyError
+    }
 }
 
 

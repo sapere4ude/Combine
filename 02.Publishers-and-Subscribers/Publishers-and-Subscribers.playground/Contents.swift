@@ -183,21 +183,26 @@ example(of: "PassThroughSubject") {
     
     // 2
     final class StringSubscriber: Subscriber {
+        typealias Input = String
+        typealias Failure = MyError
+        
         func receive(subscription: Subscription) {
-            <#code#>
+            subscription.request(.max(2))
         }
         
         func receive(_ input: String) -> Subscribers.Demand {
-            <#code#>
+            print("Received value", input)
+            //3
+            return input == "World" ? .max(1) : .none
         }
         
         func receive(completion: Subscribers.Completion<MyError>) {
-            <#code#>
+            print("Received completion", completion)
         }
-        
-        typealias Input = String
-        typealias Failure = MyError
     }
+    
+    // 4
+    let subscriber = StringSubscriber()
 }
 
 

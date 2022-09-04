@@ -203,6 +203,40 @@ example(of: "PassThroughSubject") {
     
     // 4
     let subscriber = StringSubscriber()
+    
+    // 5
+    let subject = PassthroughSubject<String, MyError>() // PassthroughSubject는 Combine 기본 함수
+    
+    // 6
+    subject.subscribe(subscriber)
+    
+    let subscription = subject
+        .sink { completion in
+            print("Received completion (sink)", completion)
+        } receiveValue: { value in
+            print("Received value (sink)", value)
+        }
+    
+    subject.send("Hello")
+    subject.send("World")
+    
+    subscription.cancel()
+    
+    subject.send("Still there?")
+    
+    subject.send(completion: .failure(MyError.test))
+    
+    subject.send(completion: .finished)
+    subject.send("How about another one?")
+}
+
+example(of: "CurrentValueSubject") {
+    // 1
+    var subscriptions = Set<AnyCancellable>()
+    
+    // 2
+    let subject = CurrentValueSubject<Int, Never>(0)
+    
 }
 
 

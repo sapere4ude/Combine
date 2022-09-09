@@ -8,7 +8,7 @@ example(of: "Publisher") {
     let myNotification = Notification.Name("MyNotification")
     
     // 2
-    let publisher = NotificationCenter.default
+    _ = NotificationCenter.default
         .publisher(for: myNotification, object: nil)
     
     // 3
@@ -311,7 +311,25 @@ example(of: "Type erasure") {
   
   // 4
   subject.send(0)
+  subject.send(1)
 }
 
+//example(of: "async / await") {
+//    let subject = CurrentValueSubject<Int, Never>(0)
+//    
+//    // create a new asynchronous task
+//    Task {
+//        for await element in subject.values {
+//            print("Element: \(element)")
+//        }
+//        
+//        print("Completed.")
+//    }
+//    subject.send(1)
+//    subject.send(2)
+//    subject.send(3)
+//    
+//    subject.send(completion: .finished)
+//}
 
 

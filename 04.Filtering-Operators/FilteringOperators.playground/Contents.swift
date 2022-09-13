@@ -90,6 +90,97 @@ example(of: "last(where:)") {
     numbers.send(4)
     numbers.send(5)
     
-    numbers.send(completion: .finished)
+    numbers.send(completion: .finished) // 이렇게 한다고 결과값이 나오는 이유를 모르겠음.. 좀 더 찾아봐야함
 }
+
+example(of: "dropFirst") {
+  // 1
+  let numbers = (1...10).publisher
+  
+  // 2
+  numbers
+    .dropFirst(8) // default 값은 1 이라고 생각하면 된다.
+    .sink(receiveValue: { print($0) })
+    .store(in: &subscriptions)
+}
+
+example(of: "drop(while:)") {
+  // 1
+  let numbers = (1...10).publisher
+  
+  // 2
+  numbers
+    .drop(while: { $0 % 5 != 0 })
+    .sink(receiveValue: { print($0) })
+    .store(in: &subscriptions)
+}
+
+example(of: "drop(untilOutputFrom:)") {
+  // 1
+  let isReady = PassthroughSubject<Void, Never>()
+  let taps = PassthroughSubject<Int, Never>()
+  
+  // 2
+  taps
+    .drop(untilOutputFrom: isReady)
+    .sink(receiveValue: { print($0) })
+    .store(in: &subscriptions)
+  
+  // 3
+  (1...5).forEach { n in
+    taps.send(n)
+    
+    if n == 3 {
+      isReady.send()
+    }
+  }
+}
+
+example(of: "prefix") {
+  // 1
+  let numbers = (1...10).publisher
+  
+  // 2
+  numbers
+    .prefix(2)
+    .sink(receiveCompletion: { print("Completed with: \($0)") },
+          receiveValue: { print($0) })
+    .store(in: &subscriptions)
+}
+
+example(of: "prefix(while:)") {
+  // 1
+  let numbers = (1...10).publisher
+  
+  // 2
+  numbers
+    .prefix(while: { $0 < 3 })
+    .sink(receiveCompletion: { print("Completed with: \($0)") },
+          receiveValue: { print($0) })
+    .store(in: &subscriptions)
+}
+
+example(of: "prefix(untilOutputFrom:)") {
+  // 1
+  let isReady = PassthroughSubject<Void, Never>()
+  let taps = PassthroughSubject<Int, Never>()
+  
+  // 2
+  taps
+    .prefix(untilOutputFrom: isReady)
+    .sink(receiveCompletion: { print("Completed with: \($0)") },
+          receiveValue: { print($0) })
+    .store(in: &subscriptions)
+  
+  // 3
+  (1...5).forEach { n in
+    taps.send(n)
+    
+    if n == 2 {
+      isReady.send()
+    }
+  }
+}
+
+
 

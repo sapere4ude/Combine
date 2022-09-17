@@ -119,7 +119,7 @@ example(of: "prepend(Publisher) #2") {
   
   // 2
   publisher1
-    .prepend(publisher2)
+    .prepend(publisher2)    // Publisher2 가 선행한다. .finished 로 알려줘야 그제서야 publisher1이 진행될 수 있다.
     .sink(receiveValue: { print($0) })
     .store(in: &subscriptions)
 

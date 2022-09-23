@@ -131,7 +131,6 @@ example(of: "prepend(Publisher) #2") {
 
 }
 
-<<<<<<< Updated upstream
 example(of: "merge(with:)") {
   // 1
   let publisher1 = PassthroughSubject<Int, Never>()
@@ -142,7 +141,7 @@ example(of: "merge(with:)") {
     .merge(with: publisher2)
     .sink(
       receiveCompletion: { _ in print("Completed") },
-=======
+
 example(of: "switchToLatest") {
   // 1
   let publisher1 = PassthroughSubject<Int, Never>()
@@ -157,12 +156,10 @@ example(of: "switchToLatest") {
     .switchToLatest()
     .sink(
       receiveCompletion: { _ in print("Completed!") },
->>>>>>> Stashed changes
       receiveValue: { print($0) }
     )
     .store(in: &subscriptions)
 
-<<<<<<< Updated upstream
   // 3
   publisher1.send(1)
   publisher1.send(2)
@@ -237,30 +234,29 @@ example(of: "zip") {
   publisher2.send(completion: .finished)
 }
 
-
-=======
+      
   // 4
-  publishers.send(publisher1)
-  publisher1.send(1)
-  publisher1.send(2)
-
-  // 5
-  publishers.send(publisher2)   // publisher1에 대한 구독이 취소되었음을 알 수 있다.
-  publisher1.send(3)            // 그렇기 때문에 publisher1이 3을 보내도 무시된다.
-  publisher2.send(4)
-  publisher2.send(5)
-
-  // 6
-  publishers.send(publisher3)   // publisher2에 대한 구독이 취소되었음을 알 수 있다.
-  publisher2.send(6)            // 그렇기 때문에 publisher2가 6을 보내도 무시된다.
-  publisher3.send(7)
-  publisher3.send(8)
-  publisher3.send(9)
-
-  // 7
-  publisher3.send(completion: .finished)
-  publishers.send(completion: .finished)
-}
+//  publishers.send(publisher1)
+//  publisher1.send(1)
+//  publisher1.send(2)
+//
+//  // 5
+//  publishers.send(publisher2)   // publisher1에 대한 구독이 취소되었음을 알 수 있다.
+//  publisher1.send(3)            // 그렇기 때문에 publisher1이 3을 보내도 무시된다.
+//  publisher2.send(4)
+//  publisher2.send(5)
+//
+//  // 6
+//  publishers.send(publisher3)   // publisher2에 대한 구독이 취소되었음을 알 수 있다.
+//  publisher2.send(6)            // 그렇기 때문에 publisher2가 6을 보내도 무시된다.
+//  publisher3.send(7)
+//  publisher3.send(8)
+//  publisher3.send(9)
+//
+//  // 7
+//  publisher3.send(completion: .finished)
+//  publishers.send(completion: .finished)
+//}
 
 example(of: "switchToLatest - Network Request") {
   let url = URL(string: "https://source.unsplash.com/random")!
@@ -295,5 +291,3 @@ example(of: "switchToLatest - Network Request") {
     taps.send()
   }
 }
->>>>>>> Stashed changes
-

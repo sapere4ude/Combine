@@ -4,5 +4,7 @@
         <page name='Delay'/>
         <page name='Collect'/>
         <page name='Debounce'/>
+        <page name='Throttle'/>
+        <page name='TimigOut'/>
     </pages>
 </playground>

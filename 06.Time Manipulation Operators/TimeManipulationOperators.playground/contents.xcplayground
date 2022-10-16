@@ -6,5 +6,6 @@
         <page name='Debounce'/>
         <page name='Throttle'/>
         <page name='TimigOut'/>
+        <page name='MeasuringTime'/>
     </pages>
 </playground>

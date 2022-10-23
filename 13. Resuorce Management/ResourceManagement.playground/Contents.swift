@@ -23,30 +23,65 @@ import Foundation
 //  receiveValue: { print("subscription2 received: '\($0)'") }
 //)
 
-// multicast()
+//// multicast()
+//// 1
+//let subject = PassthroughSubject<Data, URLError>() // cf. subject는 원하는 값을 주입할 수 있는 publihser
+//
+//// 2
+//let multicasted = URLSession.shared
+//  .dataTaskPublisher(for: URL(string: "https://www.raywenderlich.com")!)
+//  .map(\.data)
+//  .print("multicast")
+//  .multicast(subject: subject)
+//
+//// 3
+//let subscription1 = multicasted
+//  .sink(
+//    receiveCompletion: { _ in },
+//    receiveValue: { print("subscription1 received: '\($0)'") }
+//  )
+//
+//let subscription2 = multicasted
+//  .sink(
+//    receiveCompletion: { _ in },
+//    receiveValue: { print("subscription2 received: '\($0)'") }
+//  )
+//
+//// 4
+//let cancellable = multicasted.connect()
+
 // 1
-let subject = PassthroughSubject<Data, URLError>() // cf. subject는 원하는 값을 주입할 수 있는 publihser
+func performSomeWork() throws -> Int {
+  print("Performing some work and returning a result")
+  return 5
+}
 
 // 2
-let multicasted = URLSession.shared
-  .dataTaskPublisher(for: URL(string: "https://www.raywenderlich.com")!)
-  .map(\.data)
-  .print("multicast")
-  .multicast(subject: subject)
+let future = Future<Int, Error> { fulfill in
+  do {
+    let result = try performSomeWork()
+    // 3
+    fulfill(.success(result))
+  } catch {
+    // 4
+    fulfill(.failure(error))
+  }
+}
 
-// 3
-let subscription1 = multicasted
+print("Subscribing to future...")
+
+// 5
+let subscription1 = future
   .sink(
-    receiveCompletion: { _ in },
+    receiveCompletion: { _ in print("subscription1 completed") },
     receiveValue: { print("subscription1 received: '\($0)'") }
   )
 
-let subscription2 = multicasted
+// 6
+let subscription2 = future
   .sink(
-    receiveCompletion: { _ in },
+    receiveCompletion: { _ in print("subscription2 completed") },
     receiveValue: { print("subscription2 received: '\($0)'") }
   )
 
-// 4
-let cancellable = multicasted.connect()
 

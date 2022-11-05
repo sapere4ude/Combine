@@ -10,7 +10,13 @@ enum MyError: Error {
 example(of: "setFailureType") {
     Just("Hello")
     .setFailureType(to: MyError.self)
-    // 1
+}
+
+example(of: "assertNoFailure") {
+  // 1
+  Just("Hello")
+    .setFailureType(to: MyError.self)
+    .assertNoFailure() // 2
     .sink(
       receiveCompletion: { completion in
         switch completion {
@@ -27,7 +33,6 @@ example(of: "setFailureType") {
     )
     .store(in: &subscriptions)
 }
-
 
 example(of: "assign(to:on:)") {
   // 1
@@ -48,7 +53,6 @@ example(of: "assign(to:on:)") {
     .store(in: &subscriptions)
 }
 
-
 example(of: "assertNoFailure") {
   // 1
   Just("Hello")
@@ -57,5 +61,3 @@ example(of: "assertNoFailure") {
     .sink(receiveValue: { print("Got value: \($0) ")}) // 3
     .store(in: &subscriptions)
 }
-
-

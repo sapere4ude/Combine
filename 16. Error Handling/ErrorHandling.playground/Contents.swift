@@ -61,3 +61,59 @@ example(of: "assertNoFailure") {
     .sink(receiveValue: { print("Got value: \($0) ")}) // 3
     .store(in: &subscriptions)
 }
+
+example(of: "tryMap") {
+  // 1
+  enum NameError: Error {
+    case tooShort(String)
+    case unknown
+  }
+
+  // 2
+  let names = ["Marin", "Shai", "Florent"].publisher
+  
+  names
+    .map { value -> Int in
+        // 1
+        let length = value.count
+        // 2
+        guard length >= 5 else {
+            throw NameError.tooShort(value)
+        }
+        // 3
+        return value.count
+    }
+    .sink(
+      receiveCompletion: { print("Completed with \($0)") },
+      receiveValue: { print("Got value: \($0)") }
+    )
+}
+
+example(of: "map vs tryMap") {
+  // 1
+  enum NameError: Error {
+    case tooShort(String)
+    case unknown
+  }
+
+  // 2
+  Just("Hello")
+    .setFailureType(to: NameError.self) // 3
+    .map { $0 + " World!" } // 4
+    .sink(
+      receiveCompletion: { completion in
+        // 5
+        switch completion {
+        case .finished:
+          print("Done!")
+        case .failure(.tooShort(let name)):
+          print("\(name) is too short!")
+        case .failure(.unknown):
+          print("An unknown name error occurred")
+        }
+      },
+      receiveValue: { print("Got value \($0)") }
+    )
+    .store(in: &subscriptions)
+}
+

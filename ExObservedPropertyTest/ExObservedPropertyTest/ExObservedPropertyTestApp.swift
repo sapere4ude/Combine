@@ -11,7 +11,7 @@ import SwiftUI
 struct ExObservedPropertyTestApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(contentViewModel: ContentViewModel(detailViewModel: .mock))
+            ContentView(contentViewModel: ContentViewModel(detailViewModel: .init()))
         }
     }
 }

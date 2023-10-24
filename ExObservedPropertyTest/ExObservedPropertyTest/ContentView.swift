@@ -20,13 +20,13 @@ struct ContentView: View {
             Button {
                 self.contentViewModel.detailViewModel.requestRandomValue()
             } label: {
-                Text("test입니다")
+                Text("버튼을 눌러주세요")
             }
-
+            Text(String(self.contentViewModel.detailViewModel.randomValue))
         }
     }
 }
 
 #Preview {
-    ContentView(contentViewModel: ContentViewModel(detailViewModel: .init(text: "테스트입니다.")))
+    ContentView(contentViewModel: ContentViewModel(detailViewModel: .init()))
 }

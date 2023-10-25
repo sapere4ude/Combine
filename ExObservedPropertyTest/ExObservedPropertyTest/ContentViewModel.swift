@@ -10,7 +10,7 @@ import Combine
 
 final class ContentViewModel: ObservableObject {
     
-    var detailViewModel: DetailViewModel // 처음 가졌던 생각은 여기에 그냥 @Published 붙이면 업데이트 되는거 아닌가? 라는 생각
+    var detailViewModel: DetailViewModel
     private var cancellables: Set<AnyCancellable>
     
     init(detailViewModel: DetailViewModel) {

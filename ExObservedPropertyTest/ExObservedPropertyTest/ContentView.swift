@@ -16,11 +16,11 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 30) {
             Button {
                 self.contentViewModel.detailViewModel.requestRandomValue()
             } label: {
-                Text("버튼을 눌러주세요")
+                Text("클릭하면 아래의 숫자가 업데이트 됩니다.")
             }
             Text(String(self.contentViewModel.detailViewModel.randomValue))
         }
